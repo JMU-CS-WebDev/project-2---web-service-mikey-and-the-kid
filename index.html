@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dictionours</title>
+  </head>
+  <body>
+    <input
+      type="text"
+      name="query"
+      id="query"
+      autocomplete="off"
+      placeholder="query"
+    />
+    <script>
+      const queryBox = document.getElementById("query");
+
+      const createAndInsertTerm = (resultObj) => {
+        console.log("createAndInsertTerm", resultObj);
+        //      make a dt for the word
+        const dt = document.createElement("dt");
+        dt.innerText = resultObj.result.word;
+        const dl = document.querySelector("dl");
+        dl.append(dt);
+      };
+      const createAndInsertTermDefinitions = (resultObj) => {};
+      const insertResultInDOM = (resultObj) => {
+        // mark up the results into html
+        //      make a dl to hold all the elements
+        const dl = document.createElement("dl");
+        document.body.append(dl);
+        createAndInsertTerm(resultObj);
+        createAndInsertTermDefinitions(resultObj);
+
+        //      make a dd for each definition
+        const dd = document.createElement("dd");
+        // add the html into the page
+        //      add the dt and then its dd's to the dl
+        //      add the dl to the body
+      };
+      const search = (query) => {
+        console.log("searching for", query);
+        // fetch results from server
+        fetch(`http://localhost:5000/${query}`)
+          .then((response) => response.json())
+          .then(insertResultInDOM);
+      };
+      // listen for pressed enter
+      queryBox.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          //   console.log("ev", ev);
+          //   console.log(ev.target.value);
+          //   console.log(queryBox.value);
+          // get their query
+          search(queryBox.value);
+        }
+      });
+    </script>
+  </body>
+</html>
