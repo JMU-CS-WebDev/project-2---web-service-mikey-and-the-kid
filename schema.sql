@@ -1,5 +1,3 @@
-DROP DATABASE IF EXISTS person;
-
 CREATE TABLE person (
     personID SERIAL PRIMARY KEY,
     weight          int,
@@ -9,4 +7,16 @@ CREATE TABLE person (
     is_deleted INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE lifts (
+    liftsID    SERIAL PRIMARY KEY,
+    personID_1 TEXT,
+    bench      int,
+    squat      int,
+    deadlift   int,
+    is_deleted INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
 );
