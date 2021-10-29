@@ -53,6 +53,17 @@ curl --header 'Content-Type: application/json' \<br>
   curl --request DELETE \<br>
 http://localhost:5000/person/1
 </p>
+<p><h1>SERVER CONFIGURATION</h1>
+    <h3>NGINX</h3>
+    We used NGINX as a way of configuring a proxy server for our service to add HTTPS encryption to our data, 
+    our listening port was also changed to port 8443.
+    <h3>Firewall</h3>
+    After encrypyting on our 8443 port we installed ufw to support a firewall and block other ports traffic.
+    The firewall currently allows traffic through ports 22, 80, 443, and 8443.
+    <h3>Process Management</h3>
+    Lastly to keep uptime on our service we used the PM2 package on NPM as a process manager so we can log out
+    of our droplet while keeping our service online. 
+</p>
 </body>
 </html>
 
