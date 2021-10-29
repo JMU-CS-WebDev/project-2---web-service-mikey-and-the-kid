@@ -1,4 +1,4 @@
-html lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible"
@@ -8,19 +8,51 @@ width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-    <h4>Michael && Alex</h4>
-    <p>Gym Users</p>
-    <ul>END POINTS:
+    <h1>Michael && Alex</h1>
+    <h1>Gym Users</h1>
+    <ul><h1>END POINTS:</h1>
         <li>/person<ul>
             <li>Dumps all data in the database in JSON</li>
         </ul></li>
         <li>/insert<ul>
             <li>Inserts into the database</li>
-            <li></li>
+            <li>Expects data in JSON format of personID, weight, yearsTraining, name, and thier age</li>
+            <li>Responds if there is an errory otherwise says "it worked!"</li>
         </ul></li>
-        <li>Person<ul><li></li></ul></li>
-        <li>Person<ul><li></li></ul></li>
+        <li>/person/id<ul>
+            <li>Updates the person with the given ID(this should be named update)</li>
+            <li>HTTP PATCH request</li>
+            <li>Expects JSON data, with weight, yearsTraining, name, and age</li>
+            <li>Also expects an ID from the request parameters</li>
+            <li>Responds with an error, otherwise is silent</li>
+        </ul></li>
+        <li>/remove/id<ul>
+            <li>Deletes the person with the corresponding ID from the DB</li>
+            <li>DELETE request</li>
+            <li>requires ID from request parameters</li>
+            <li>responds with an error if it fails</li>
+        </ul></li>
     </ul>
+
+<p><h1>CRUD OPERATION CALLS</h1>
+    <h3>Post database</h3>
+    curl -v localhost:5000/person
+<br>
+<h3>Insert into database</h3>
+    curl -v \<br>
+--header 'Content-Type: application/json' \<br>
+--data '{"personID": 2, "weight": 103, "yearsTraining": 3, "name": "john", "age": 12}' \<br>
+http://localhost:5000/insert<br>
+<h3>Patch database</h3>
+
+curl --header 'Content-Type: application/json' \<br>
+  --request PATCH \<br>
+  --data '{"weight": 150, "yearsTraining": 4, "name": "terry", "age": 16}' \<br>
+  http://localhost:5000/person/1<br>
+  <h3>Delete from database(first entry)</h3>
+  curl --request DELETE \<br>
+http://localhost:5000/person/1
+</p>
 </body>
 </html>
 
