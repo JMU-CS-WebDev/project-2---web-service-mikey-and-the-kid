@@ -1,0 +1,15 @@
+curl -v localhost:5000/person
+
+curl -v \
+--header 'Content-Type: application/json' \
+--data '{"personID": 2, "weight": 103, "yearsTraining": 3, "name": "john", "age": 12}' \
+http://localhost:5000/insert
+
+
+curl --request DELETE \
+http://localhost:5000/person/2
+
+curl --header 'Content-Type: application/json' \
+  --request PATCH \
+  --data '{"weight": 150, "yearsTraining": 4, "name": "terry", "age": 16}' \
+  http://localhost:5000/person/1

@@ -1,120 +1,134 @@
 const express = require("express");
+const mysql = require("mysql");
+const fs = require('fs');
+
 const { createConnection } = require("net");
 
 const service = express();
+const credentials = JSON.parse(fs.readFileSync('credentials.json', 'utf8'));
+const connection = mysql.createConnection(credentials);
+//read in credentials JSON
 
 // add middleware that express already provides,
 // to parse the request body as json     
 service.use(express.json());
 
-// The resource to share.
-const dictionary = {
-  duck: {
-    word: "duck",
-    definitions: [
-      {
-        id: 0,
-        likes: 57,
-        definition: "funky",
-      },
-      {
-        id: 1,
-        likes: 4,
-        definition: "1612",
-      },
-    ],
-  },
-  promise: {
-    word: "promise",
-    definitions: [
-      {
-        id: 1,
-        likes: 57,
-        definition: "what chad couldn't keep",
-      },
-      {
-        id: 0,
-        likes: 4,
-        definition: "A structure used to represent a pending computation.",
-      },
-    ],
-  },
-};
+
+connection.connect(error => {
+  if (error) {
+    console.error(error);
+    process.exit(1);
+  }
+});
+
 
 const port = 5000;
-service.listen(port, () => {
+service.listen(port,  () => {
   console.log(`We're live on port ${port}!`);
 });
 
-service.get("/words", (request, response) => {
-  response.json({
-    ok: true,
-    result: Object.keys(dictionary),
-  });
-});
-
-service.get("/:word", (request, response) => {
-  const wordParam = request.params.word;
-  response.json({
-    ok: true,
-    result: dictionary[wordParam],
-  });
-});
-// to test:
-// curl -v \
-// --request POST \
-// --header 'Content-Type: application/json' \
-// --data '{"definition": "world wide web"}' \
-// http://localhost:5000/www
-service.post("/:word", (request, response) => {
-  const newWord = request.params.word;
-  const newWordDef = request.body.definition;
-  // add the new word with its defn to our "database"
-
-  dictionary[newWord] = {
-    word: newWord,
-    definitions: [
-      {
-        id: 1,
-        likes: 1,
-        definition: newWordDef,
-      },
-    ],
+function rowToMemory(row) {
+  return {
+    personID: row.personID,
+    weight: row.weight,
+    yearsTraining: row.yearsTraining,
+    name : row.name,
+    age: row.age,
+    is_deleted: row.is_deleted,
+    created_at: row.created_at,
+    updated_at: row.updated_at
   };
+}
 
-  response.json({
-    ok: true,
-    result: dictionary[newWord],
+//get
+service.get('/person', (request, response) => {
+   const query = 'SELECT * FROM person';
+   connection.query(query, (error, rows) => {
+    if (error) {
+      response.status(500);
+      response.json({
+        ok: false,
+        results: error.message,
+      });
+    } else {
+      const memories = rows.map(rowToMemory);
+      response.json({
+        ok: true,
+        results: rows.map(rowToMemory),
+      });
+    }
+  });
+
+});
+//post
+service.post('/insert', (request, response) => {
+  const parameters =[
+    request.body.personID,
+    request.body.weight,
+    request.body.yearsTraining,
+    request.body.name,
+    request.body.age
+  ];
+const query = 'INSERT INTO person(personID, weight, yearsTraining, name, age) VALUES(?, ?, ?, ?, ?)';
+connection.query(query, parameters, (error, result) => {
+  if (error) {
+    response.status(500);
+    response.json({
+      ok: false,
+      results: error.message,
+    });
+  } else {
+    response.json({
+      ok: true,
+      results: 'It worked!',
+    });
+  }
+});
+});
+
+//update
+service.patch('/person/:id', (request, response) => {
+  const parameters = [
+    request.body.weight,
+    request.body.yearsTraining,
+    request.body.name,
+    request.body.age,
+    parseInt(request.params.id)
+  ];
+
+  const query = 'UPDATE person SET weight = ?, yearsTraining = ?, name = ?, age = ? WHERE personID = ?';
+  connection.query(query, parameters, (error, result) => {
+    if (error) {
+      response.status(404);
+      response.json({
+        ok: false,
+        results: error.message,
+      });
+    } else {
+      response.json({
+        ok: true,
+      });
+    }
   });
 });
 
-service.patch("/:word/:definitionId/like", (request, response) => {
-  word = request.params.word;
-  id = request.params.definitionId;
-
-  dictionary[word].definitions[id].likes++;
-
-  response.json({ 
-    ok: true,
-    result: dictionary[word],
+//delete
+service.delete('/remove/:id', (request, response) => {
+  const parameters = [parseInt(request.params.id)];
+ 
+  const query = 'DELETE FROM person WHERE personID = ?';
+  connection.query(query, parameters, (error, result) => {
+    if (error) {
+      response.status(404);
+      response.json({
+        ok: false,
+        results: error.message,
+      });
+    } else {
+      response.json({
+        ok: true,
+      });
+    }
   });
 });
 
-// service.post("/:word", (request, response) => {
-//   const newWord = request.params.word;
-//   const newWordDefn = request.body.definition;
-//   dictionary[newWord] = {
-//     word: newWord,
-//     definitions: [
-//       {
-//         id: 1,
-//         likes: 1,
-//         definition: newWordDefn,
-//       },
-//     ],
-//   };
-//   response.json({
-//     ok: true,
-//     result: dictionary[newWord],
-//   });
-// });
