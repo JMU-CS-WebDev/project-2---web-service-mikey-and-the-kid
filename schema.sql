@@ -1,4 +1,3 @@
-
 USE gym;
 DROP TABLE IF EXISTS person;
 
