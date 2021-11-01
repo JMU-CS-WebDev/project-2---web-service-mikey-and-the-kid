@@ -19,14 +19,14 @@ width, initial-scale=1.0">
             <li>Expects data in JSON format of personID, weight, yearsTraining, name, and thier age</li>
             <li>Responds if there is an errory otherwise says "it worked!"</li>
         </ul></li>
-        <li>/person/id<ul>
+        <li>/person/:id<ul>
             <li>Updates the person with the given ID(this should be named update)</li>
             <li>HTTP PATCH request</li>
             <li>Expects JSON data, with weight, yearsTraining, name, and age</li>
             <li>Also expects an ID from the request parameters</li>
             <li>Responds with an error, otherwise is silent</li>
         </ul></li>
-        <li>/remove/id<ul>
+        <li>/remove/:id<ul>
             <li>Deletes the person with the corresponding ID from the DB</li>
             <li>DELETE request</li>
             <li>requires ID from request parameters</li>
@@ -51,7 +51,7 @@ curl --header 'Content-Type: application/json' \<br>
   http://localhost:5000/person/1<br>
   <h3>Delete from database(first entry)</h3>
   curl --request DELETE \<br>
-http://localhost:5000/person/1
+http://localhost:5000/remove/1
 </p>
 <p><h1>SERVER CONFIGURATION</h1>
     <h3>NGINX</h3>
