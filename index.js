@@ -42,8 +42,8 @@ function rowToMemory(row) {
 
 //get
 service.get('/person', (request, response) => {
-   const query = 'SELECT * FROM person';
-   connection.query(query, (error, rows) => {
+  const query = 'SELECT * FROM person';
+  connection.query(query, (error, rows) => {
     if (error) {
       response.status(500);
       response.json({
@@ -69,21 +69,21 @@ service.post('/insert', (request, response) => {
     request.body.name,
     request.body.age
   ];
-const query = 'INSERT INTO person(personID, weight, yearsTraining, name, age) VALUES(?, ?, ?, ?, ?)';
-connection.query(query, parameters, (error, result) => {
-  if (error) {
-    response.status(500);
-    response.json({
-      ok: false,
-      results: error.message,
-    });
-  } else {
-    response.json({
-      ok: true,
-      results: 'It worked!',
-    });
-  }
-});
+  const query = 'INSERT INTO person(personID, weight, yearsTraining, name, age) VALUES(?, ?, ?, ?, ?)';
+  connection.query(query, parameters, (error, result) => {
+    if (error) {
+      response.status(500);
+      response.json({
+        ok: false,
+        results: error.message,
+      });
+    } else {
+      response.json({
+        ok: true,
+        results: 'It worked!',
+      });
+    }
+  });
 });
 
 //update
