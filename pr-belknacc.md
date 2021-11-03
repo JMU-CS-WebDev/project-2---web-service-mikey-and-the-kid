@@ -1,0 +1,8 @@
+1. I was unable to reach their endpoints on the web. I wasn't able to find the website url in the documentation. However it looks like the code is set up so that everything should be working properly.
+2. The gym lookup service seems like it could be useful. I'm assuming that this service would be used internally by employees at the gym rather than the people working out.
+3. I think the post and delete paths make sense for the contexts. However having the get and patch endpoints both as "person" could make things a little more confusing. It might help keep things consistent by renaming them to "update" or "get".
+4. I like that the structure of responses in all of the endpoints returns an error message if something goes wrong. I also like how the endpoint for the post request gives confirmation "it worked!" to give the user feedback. I think that type of small response would be a great addition to the patch and delete services.
+5. One significant difference between my service and this group's is that this group managed to fully implement all of the CRUD functions. Our group is still lacking some of these features. Having this range of options allows the user to perform more actions and have a better user experience once the front end is completed.
+6. Overall the code is very well structured.
+7. I did not find any other outstanding issues.
+8. Overall, this is a well implemented project. It was really easy to follow along with the documentation from the report.html file. Great job!
